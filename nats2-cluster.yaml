@@ -1,0 +1,31 @@
+version: "3.5"
+services:
+  nats2-1:
+    image: nats
+    ports:
+      - "8223:8222"
+    networks: 
+      - nats1-network
+    command: -c /conf/server.conf
+    volumes:
+      - ./conf/c2/server1:/conf
+  nats2-2:
+    image: nats
+    networks: 
+      - nats1-network
+    depends_on: ["nats2-1"]
+    command: -c /conf/server.conf
+    volumes:
+      - ./conf/c2/server2:/conf
+  nats2-3:
+    image: nats
+    networks: 
+      - nats1-network
+    depends_on: ["nats2-2"]
+    command: -c /conf/server.conf
+    volumes:
+      - ./conf/c2/server3:/conf
+
+networks:
+  nats1-network:
+    name: nats
